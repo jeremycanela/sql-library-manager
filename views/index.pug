@@ -1,0 +1,36 @@
+extends layout.pug
+
+block content
+  h1 Books
+  p
+    a.button(href='/books/new') Create New Book
+  form(action='/books', method='post')
+    input(type='text', name='search', style='margin: 0px', placeholder='Search by book title, author, genre, or year')
+    input(type='submit', style='margin-left: 10px', value='Search')
+  if bookCount && bookCount > offset
+    table
+      thead
+      tr
+        th Title
+        th Author
+        th Genre
+        th Year
+      tbody
+        each book in books
+          tr
+            td
+              a(href=`/books/${book.id}`)= book.title
+            td= book.author
+            td= book.genre
+            td= book.year
+    - var i = 1;
+    ul.pagination
+      while i < (bookCount / 10) + 1
+        if query
+          li
+            a.button(href=`/books/q/${query}/page/${i}`)= i++
+        else
+          li
+            a.button(href=`/books/page/${i}`)= i++
+  else
+    p No results found
